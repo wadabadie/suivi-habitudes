@@ -6,7 +6,16 @@
     <div class="hf-auth-card" style="max-width:480px;">
 
         <div class="hf-auth-icon">
-            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <a class="navbar-brand" href="{{ auth()->check() ? route('habitudes.index') : route('welcome') }}" style="flex-shrink:0;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" width="130" height="32" aria-label="HabitFlow">
+                <defs><linearGradient id="hfLg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1a7a4a"/><stop offset="100%" stop-color="#2ecc71"/></linearGradient></defs>
+                <circle cx="20" cy="20" r="13" fill="none" stroke="url(#hfLg)" stroke-width="2.5"/>
+                <path d="M20 9 A11 11 0 1 1 9.5 28.5" fill="none" stroke="url(#hfLg)" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+                <path d="M13 20 L18 25 L27 15" fill="none" stroke="url(#hfLg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="40" y="16" font-family="'Playfair Display',Georgia,serif" font-size="13" font-weight="700" fill="var(--hf-texte)" letter-spacing="0.3">Habit</text>
+                <text x="40" y="32" font-family="'DM Sans',system-ui,sans-serif" font-size="10.5" font-weight="600" fill="#2ecc71" letter-spacing="2.5">FLOW</text>
+            </svg>
+        </a>
         </div>
 
         <h1 class="hf-auth-title">Créer un compte</h1>
