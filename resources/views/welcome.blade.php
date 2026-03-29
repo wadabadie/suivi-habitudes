@@ -796,12 +796,12 @@
                 <div class="hero-img-caption">
                     <!-- mini phone overlay inside -->
                     <div class="hero-img-wrap">
-            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80"
-                 alt="Méditation et bien-être" class="hero-img">
-            <div class="hero-img-overlay"></div>
-            <div class="streak-pill">🔥 Série de 14 jours !</div>
-        </div>
                 </div>
+                <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80"
+                 alt="Méditation et bien-être" class="hero-img">
+                <div class="hero-img-overlay"></div>
+                <div class="streak-pill">🔥 Série de 14 jours !</div>
+        </div>
             </div>
 
             <!-- Phone overlay bottom right -->
