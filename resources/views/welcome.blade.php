@@ -867,9 +867,7 @@
 
 <!-- ── FEATURES ── -->
 <section class="features" id="fonctionnalites">
-    <div class="reveal">
-        <div class="section-eyebrow"><span class="eyebrow-line"></span>Fonctionnalités<span class="eyebrow-line"></span></div>
-        <div class="hero-img-main">
+    <div class="hero-img-main">
                 <img
                   src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80"
                   alt="Personne faisant du sport avec motivation"
@@ -879,6 +877,8 @@
                     <!-- mini phone overlay inside -->
                     <div class="hero-img-wrap">
                 </div>
+    <div class="reveal">
+        <div class="section-eyebrow"><span class="eyebrow-line"></span>Fonctionnalités<span class="eyebrow-line"></span></div>
 
     <div class="feat-grid reveal reveal-delay-2">
         <div class="feat-card">
