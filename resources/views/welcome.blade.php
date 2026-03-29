@@ -682,9 +682,15 @@
 
 <!-- ── NAVBAR ── -->
 <nav id="navbar">
-    <a href="/" class="logo">
-        <div class="logo-icon">🌿</div>
-        Habit<span class="logo-dot">Flow</span>
+    <a href="/" class="nav-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" width="130" height="32">
+            <defs><linearGradient id="hfLg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1a7a4a"/><stop offset="100%" stop-color="#2ecc71"/></linearGradient></defs>
+            <circle cx="20" cy="20" r="13" fill="none" stroke="url(#hfLg)" stroke-width="2.5"/>
+            <path d="M20 9 A11 11 0 1 1 9.5 28.5" fill="none" stroke="url(#hfLg)" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+            <path d="M13 20 L18 25 L27 15" fill="none" stroke="url(#hfLg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="40" y="16" font-family="'Playfair Display',Georgia,serif" font-size="13" font-weight="700" fill="var(--texte)" letter-spacing="0.3">Habit</text>
+            <text x="40" y="32" font-family="'DM Sans',system-ui,sans-serif" font-size="10.5" font-weight="600" fill="#2ecc71" letter-spacing="2.5">FLOW</text>
+        </svg>
     </a>
 
     <button class="hamburger" id="hamburger" onclick="toggleMenu()">
@@ -715,12 +721,6 @@
     <div class="hero-bg-image"></div>
     <div class="hero-overlay"></div>
     <div class="hero-grid"></div>
-    <div class="hero-img-wrap">
-            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80"
-                 alt="Méditation et bien-être" class="hero-img">
-            <div class="hero-img-overlay"></div>
-            <div class="streak-pill">🔥 Série de 14 jours !</div>
-        </div>
     <div class="hero-content">
         <div class="hero-badge">
             <span class="badge-pulse"></span>
@@ -795,6 +795,12 @@
                 >
                 <div class="hero-img-caption">
                     <!-- mini phone overlay inside -->
+                    <div class="hero-img-wrap">
+            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80"
+                 alt="Méditation et bien-être" class="hero-img">
+            <div class="hero-img-overlay"></div>
+            <div class="streak-pill">🔥 Série de 14 jours !</div>
+        </div>
                 </div>
             </div>
 
