@@ -9,66 +9,37 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use PragmaRX\Google2faQRCode\Google2FA;
+
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers{
         register as registration;
     }
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
     protected $redirectTo = '/home';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'name'     => ['required', 'string', 'max:255'],
+            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @return User
-     */
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'name'             => $data['name'],
+            'email'            => $data['email'],
+            'password'         => Hash::make($data['password']),
             'google2fa_secret' => $data['google2fa_secret'],
         ]);
     }
@@ -77,58 +48,71 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        $google2fa = app('pragmarx.google2fa');
+        $google2fa  = app('pragmarx.google2fa');
+        $secret     = $google2fa->generateSecretKey();
 
-        $registration_data = $request->all();
-        $registration_data['google2fa_secret'] = $google2fa->generateSecretKey();
+        $registrationData = [
+            'name'             => $request->name,
+            'email'            => $request->email,
+            'password'         => $request->password,
+            'google2fa_secret' => $secret,
+        ];
 
+        $request->session()->put('registration_data', $registrationData);
+        $request->session()->save();
 
-        $request->session()->put('registration_data', $registration_data);
-
+        $cacheKey = 'reg_' . md5($request->email);
+        Cache::put($cacheKey, $registrationData, now()->addMinutes(30));
 
         $QR_Image = $google2fa->getQRCodeInline(
             config('app.name'),
-            $registration_data['email'],
-            $registration_data['google2fa_secret']
+            $request->email,
+            $secret
         );
 
-        $secret = $registration_data['google2fa_secret'];
-
         return view('google2fa.register', compact('QR_Image', 'secret'));
+    }
 
+    public function showVerify2FA(Request $request)
+    {
+        $registrationData = session('registration_data');
+        if (!$registrationData) {
+            return redirect('/register')->withErrors([
+                'session' => 'Session expirée. Veuillez vous réinscrire.'
+            ]);
+        }
+        return view('google2fa.verify');
     }
 
     public function completeRegistration(Request $request)
     {
         $registrationData = session('registration_data');
+
         if (!$registrationData) {
-            return redirect('/register')->withErrors(['session' => 'Session expired. Please register again.']);
+            return redirect('/register')->withErrors([
+                'session' => 'Session expirée. Veuillez vous réinscrire.'
+            ]);
         }
 
-        // Vérifier le code OTP
         $otp = $request->input('otp');
         if (!$otp) {
-            return redirect('/register/verify-2fa')->withErrors(['otp' => 'Code OTP requis.']);
+            return back()->withErrors(['otp' => 'Code OTP requis.']);
         }
 
         $google2fa = app('pragmarx.google2fa');
         $valid = $google2fa->verifyKey($registrationData['google2fa_secret'], $otp);
 
         if (!$valid) {
-            return back()->withErrors(['otp' => 'Code OTP invalide.']);
+            return back()->withErrors(['otp' => 'Code OTP invalide. Réessaie.']);
         }
 
-        $request->merge($registrationData);
-        $user = $this->create($request->all());
+        $user = $this->create($registrationData);
+
+        $request->session()->forget('registration_data');
+
         Auth::login($user);
-        return redirect('/home');
-    }
+        session(['google2fa_passed' => true]);
 
-    public function showVerify2FA()
-    {
-        if (!session('registration_data')) {
-            return redirect('/register');
-        }
-        return view('google2fa.verify');
+        return redirect()->route('habitudes.index');
     }
 }
