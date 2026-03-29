@@ -784,13 +784,10 @@
                 <img
                   src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80"
                   alt="Personne faisant du sport avec motivation"
-                  loading="eager"
+                  loading="eager" width="100"
                 >
-                <div class="hero-img-caption">
-                    <!-- mini phone overlay inside -->
-                    <div class="hero-img-wrap">
-                </div>
             </div>
+
 
             <!-- Main image -->
             <div class="hero-img-main">
