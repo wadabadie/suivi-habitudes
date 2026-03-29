@@ -797,10 +797,6 @@
                     <!-- mini phone overlay inside -->
                     <div class="hero-img-wrap">
                 </div>
-                <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80"
-                 alt="Méditation et bien-être" class="hero-img">
-                <div class="hero-img-overlay"></div>
-                <div class="streak-pill">🔥 Série de 14 jours !</div>
         </div>
             </div>
 
@@ -873,6 +869,10 @@
 <section class="features" id="fonctionnalites">
     <div class="reveal">
         <div class="section-eyebrow"><span class="eyebrow-line"></span>Fonctionnalités<span class="eyebrow-line"></span></div>
+        <div><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80"
+                 alt="Méditation et bien-être" class="hero-img">
+                <div class="hero-img-overlay"></div>
+                <div class="streak-pill">🔥 Série de 14 jours !</div>
         <h2 class="section-title">Tout ce qu'il te faut<br>pour <em style="font-style:italic;color:var(--emerald)">réussir</em></h2>
         <p class="section-sub">Des outils puissants et simples pour transformer tes intentions en victoires concrètes, chaque jour.</p>
     </div>
