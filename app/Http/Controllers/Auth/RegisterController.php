@@ -115,4 +115,22 @@ class RegisterController extends Controller
 
         return redirect()->route('habitudes.index');
     }
+
+    public function showQrCode()
+    {
+        $registrationData = session('registration_data');
+        if (!$registrationData) {
+            return redirect('/register');
+        }
+
+        $google2fa = app('pragmarx.google2fa');
+        $QR_Image  = $google2fa->getQRCodeInline(
+            config('app.name'),
+            $registrationData['email'],
+            $registrationData['google2fa_secret']
+        );
+        $secret = $registrationData['google2fa_secret'];
+
+        return view('google2fa.register', compact('QR_Image', 'secret'));
+    }
 }

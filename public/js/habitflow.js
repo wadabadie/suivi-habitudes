@@ -1,25 +1,28 @@
-
 const ThemeManager = (() => {
-    const KEY = 'hf-theme';
+    const KEY  = 'hf-theme';
     const ATTR = 'data-theme';
 
-    function get() {
-        return localStorage.getItem(KEY) || 'dark';
+    function storage(action, value) {
+        try {
+            if (action === 'get') return localStorage.getItem(KEY);
+            if (action === 'set') localStorage.setItem(KEY, value);
+        } catch(e) { return null; }
     }
+
+    function get() { return storage('get') || 'dark'; }
 
     function apply(theme) {
         document.documentElement.setAttribute(ATTR, theme);
-        localStorage.setItem(KEY, theme);
-        // Mettre à jour l'icône du toggle
+        storage('set', theme);
         const btn = document.getElementById('themeToggle');
         if (!btn) return;
-        btn.querySelector('.icon-dark').style.display  = theme === 'light' ? 'none' : 'block';
-        btn.querySelector('.icon-light').style.display = theme === 'dark'  ? 'none' : 'block';
+        const dark  = btn.querySelector('.icon-dark');
+        const light = btn.querySelector('.icon-light');
+        if (dark)  dark.style.display  = theme === 'light' ? 'none' : 'inline-block';
+        if (light) light.style.display = theme === 'dark'  ? 'none' : 'inline-block';
     }
 
-    function toggle() {
-        apply(get() === 'dark' ? 'light' : 'dark');
-    }
+    function toggle() { apply(get() === 'dark' ? 'light' : 'dark'); }
 
     function init() {
         apply(get());
@@ -31,9 +34,6 @@ const ThemeManager = (() => {
 })();
 
 
-/* ══════════════════════════════════════════
-   2. TIMER OTP (codes 2FA)
-══════════════════════════════════════════ */
 const OtpTimer = (() => {
     function init() {
         const numEl    = document.getElementById('timerNum');
@@ -47,8 +47,7 @@ const OtpTimer = (() => {
             numEl.textContent = secondes;
             if (spanEl) spanEl.textContent = secondes;
             cercleEl.style.setProperty('--prog', (secondes / 30 * 100) + '%');
-            if (secondes === 0) secondes = 30;
-            else secondes--;
+            secondes = secondes === 0 ? 30 : secondes - 1;
         }
 
         update();
@@ -59,9 +58,6 @@ const OtpTimer = (() => {
 })();
 
 
-/* ══════════════════════════════════════════
-   3. SÉLECTEUR DE COULEUR
-══════════════════════════════════════════ */
 const ColourPicker = (() => {
     function init() {
         document.querySelectorAll('.hf-couleur-opt').forEach(el => {
@@ -69,67 +65,59 @@ const ColourPicker = (() => {
                 document.querySelectorAll('.hf-couleur-opt').forEach(o => o.classList.remove('selected'));
                 el.classList.add('selected');
                 const couleur = el.dataset.couleur;
-                const hiddenInput = document.getElementById('couleurChoisie');
-                if (hiddenInput) hiddenInput.value = couleur;
-                // Mettre à jour l'aperçu
+                const input = document.getElementById('couleurChoisie');
+                if (input) input.value = couleur;
                 const accent = document.getElementById('previewAccent');
                 if (accent) accent.style.background = couleur;
             });
         });
     }
-
     return { init };
 })();
 
 
-/* ══════════════════════════════════════════
-   4. APERÇU TEMPS RÉEL (formulaires habitude)
-══════════════════════════════════════════ */
 const HabitPreview = (() => {
     function update() {
-        const nomInput  = document.getElementById('champNom');
-        const descInput = document.querySelector('textarea[name=description]');
-        const previewNom  = document.getElementById('previewNom');
-        const previewDesc = document.getElementById('previewDesc');
-
-        if (!nomInput || !previewNom) return;
-
-        previewNom.textContent  = nomInput.value  || "Nom de l'habitude";
-        if (previewDesc && descInput) {
-            previewDesc.textContent = descInput.value || "Aperçu de ta nouvelle habitude";
-        }
+        const nom  = document.getElementById('champNom');
+        const desc = document.querySelector('textarea[name=description]');
+        const pNom  = document.getElementById('previewNom');
+        const pDesc = document.getElementById('previewDesc');
+        if (!nom || !pNom) return;
+        pNom.textContent  = nom.value  || "Nom de l'habitude";
+        if (pDesc && desc) pDesc.textContent = desc.value || "Aperçu de ta nouvelle habitude";
     }
 
     function init() {
-        const nomInput  = document.getElementById('champNom');
-        const descInput = document.querySelector('textarea[name=description]');
-        if (nomInput)  nomInput.addEventListener('input', update);
-        if (descInput) descInput.addEventListener('input', update);
+        const nom  = document.getElementById('champNom');
+        const desc = document.querySelector('textarea[name=description]');
+        if (nom)  nom.addEventListener('input', update);
+        if (desc) desc.addEventListener('input', update);
     }
-
     return { init, update };
 })();
 
 
-/* ══════════════════════════════════════════
-   5. COPIER CLEF 2FA
-══════════════════════════════════════════ */
 function copierSecret() {
-    const secretEl = document.getElementById('secretKey');
-    if (!secretEl) return;
-    navigator.clipboard.writeText(secretEl.textContent.trim()).then(() => {
-        const btn = document.querySelector('.hf-copy-btn');
-        if (!btn) return;
-        const original = btn.textContent;
-        btn.textContent = 'Copié !';
-        setTimeout(() => btn.textContent = original, 2000);
-    });
+    const el = document.getElementById('secretKey');
+    if (!el) return;
+    try {
+        navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+            const btn = document.querySelector('.hf-copy-btn');
+            if (!btn) return;
+            const orig = btn.textContent;
+            btn.textContent = 'Copié !';
+            setTimeout(() => btn.textContent = orig, 2000);
+        });
+    } catch(e) {
+        const range = document.createRange();
+        range.selectNode(el);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand('copy');
+    }
 }
 
 
-/* ══════════════════════════════════════════
-   6. AUTO-FORMAT INPUT OTP (chiffres seulement)
-══════════════════════════════════════════ */
 function initOtpInput() {
     document.querySelectorAll('.hf-otp-input').forEach(input => {
         input.addEventListener('input', () => {
@@ -139,9 +127,7 @@ function initOtpInput() {
 }
 
 
-/* ══════════════════════════════════════════
-   7. FERMER LES ALERTES FLASH
-══════════════════════════════════════════ */
+
 function initAlerts() {
     document.querySelectorAll('.hf-alert[data-dismiss]').forEach(el => {
         const btn = el.querySelector('.hf-alert-close');
@@ -150,8 +136,6 @@ function initAlerts() {
             el.style.transition = 'opacity 0.3s';
             setTimeout(() => el.remove(), 300);
         });
-
-        // Auto-dismiss après 5s
         setTimeout(() => {
             if (el.parentNode) {
                 el.style.opacity = '0';
@@ -163,33 +147,70 @@ function initAlerts() {
 }
 
 
-/* ══════════════════════════════════════════
-   8. ANIMATIONS PROGRESS BARS (intersection observer)
-══════════════════════════════════════════ */
 function initProgressBars() {
     const bars = document.querySelectorAll('.hf-progress-fill[data-width]');
     if (!bars.length) return;
-
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const bar = entry.target;
-                bar.style.width = bar.dataset.width;
-                observer.unobserve(bar);
+                entry.target.style.width = entry.target.dataset.width;
+                observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.1 });
+    bars.forEach(bar => { bar.style.width = '0'; observer.observe(bar); });
+}
 
-    bars.forEach(bar => {
-        bar.style.width = '0';
-        observer.observe(bar);
+
+function initScrollTop() {
+    const btn = document.createElement('button');
+    btn.innerHTML = '↑';
+    btn.setAttribute('aria-label', 'Retour en haut');
+    btn.style.cssText = `
+        position:fixed;bottom:2rem;right:2rem;
+        width:42px;height:42px;border-radius:50%;
+        background:#1a7a4a;color:#fff;border:none;
+        font-size:1rem;font-weight:700;cursor:pointer;
+        z-index:999;opacity:0;transform:translateY(20px);
+        transition:all .3s;box-shadow:0 4px 15px rgba(26,122,74,0.4);
+    `;
+    document.body.appendChild(btn);
+    window.addEventListener('scroll', () => {
+        const visible = window.scrollY > 300;
+        btn.style.opacity = visible ? '1' : '0';
+        btn.style.transform = visible ? 'translateY(0)' : 'translateY(20px)';
+    });
+    btn.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+    btn.addEventListener('mouseenter', () => btn.style.background = '#2ecc71');
+    btn.addEventListener('mouseleave', () => btn.style.background = '#1a7a4a');
+}
+
+
+
+function initCardAnimations() {
+    const cards = document.querySelectorAll('.hab-card, .stat-card, .hf-card, .hf-hab-card, .hf-stat-card');
+    if (!cards.length) return;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, i * 60);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.05 });
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(16px)';
+        card.style.transition = 'opacity .4s ease, transform .4s ease';
+        observer.observe(card);
     });
 }
 
 
-/* ══════════════════════════════════════════
-   INIT GLOBAL
-══════════════════════════════════════════ */
+
 document.addEventListener('DOMContentLoaded', () => {
     ThemeManager.init();
     OtpTimer.init();
@@ -198,4 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initOtpInput();
     initAlerts();
     initProgressBars();
+    initScrollTop();
+    initCardAnimations();
 });

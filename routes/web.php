@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('notifications/{id}/lire', [NotificationController::class, 'lire'])->name('notifications.lire');
     Route::get('notifications/tout-lire', [NotificationController::class, 'toutLire'])->name('notifications.toutLire');
     Route::get('statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
+    Route::get('/register/show-qrcode', [RegisterController::class, 'showQrCode'])->name('show.qrcode');
 });
 
 
