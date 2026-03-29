@@ -874,8 +874,7 @@
                   loading="eager"
                 >
                 <div class="hero-img-caption">
-                    <!-- mini phone overlay inside -->
-                    <div class="hero-img-wrap">
+
                 </div>
     <div class="reveal">
         <div class="section-eyebrow"><span class="eyebrow-line"></span>Fonctionnalités<span class="eyebrow-line"></span></div>
@@ -1109,7 +1108,7 @@
         <a href="#comment" class="footer-link">Comment ça marche</a>
         <a href="#temoignages" class="footer-link">Témoignages</a>
     </div>
-    <p>© 2026 HabitFlow — Application de suivi d'habitudes. Projet académique.</p>
+    <p>© 2026 HabitFlow — Application de suivi d'habitudes.</p>
 </footer>
 
 <script>
