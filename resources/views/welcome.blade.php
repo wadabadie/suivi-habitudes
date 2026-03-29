@@ -781,9 +781,15 @@
         <div class="hero-img-stack">
             <!-- Floating stat card top -->
             <div class="float-card top-left">
-                <div class="float-label">Série en cours</div>
-                <div class="float-val">🔥 14 jours</div>
-                <div class="float-sub">Ton record !</div>
+                <img
+                  src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80"
+                  alt="Personne faisant du sport avec motivation"
+                  loading="eager"
+                >
+                <div class="hero-img-caption">
+                    <!-- mini phone overlay inside -->
+                    <div class="hero-img-wrap">
+                </div>
             </div>
 
             <!-- Main image -->
@@ -797,8 +803,7 @@
                     <!-- mini phone overlay inside -->
                     <div class="hero-img-wrap">
                 </div>
-        </div>
-            </div>
+
 
             <!-- Phone overlay bottom right -->
             <div class="phone-overlay">
@@ -867,15 +872,6 @@
 
 <!-- ── FEATURES ── -->
 <section class="features" id="fonctionnalites">
-    <div class="hero-img-main">
-                <img
-                  src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80"
-                  alt="Personne faisant du sport avec motivation"
-                  loading="eager"
-                >
-                <div class="hero-img-caption">
-
-                </div>
     <div class="reveal">
         <div class="section-eyebrow"><span class="eyebrow-line"></span>Fonctionnalités<span class="eyebrow-line"></span></div>
 
