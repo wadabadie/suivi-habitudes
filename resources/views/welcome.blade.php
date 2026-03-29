@@ -781,11 +781,9 @@
         <div class="hero-img-stack">
             <!-- Floating stat card top -->
             <div class="float-card top-left">
-                <img
-                  src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80"
-                  alt="Personne faisant du sport avec motivation"
-                  loading="eager" width="100"
-                >
+                <div class="float-label">Série en cours</div>
+                <div class="float-val">🔥 14 jours</div>
+                <div class="float-sub">Ton record !</div>
             </div>
 
 
@@ -927,7 +925,7 @@
 
     <div class="gallery-grid reveal reveal-delay-2">
         <div class="gallery-item">
-            <img src="https://images.unsplash.com/photo-1487088678257-3a541e6e3922?w=800&q=85&auto=format&fit=crop" alt="Femme qui médite au lever du soleil" loading="lazy">
+            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80" alt="Femme qui médite au lever du soleil" loading="lazy">
             <div class="gallery-caption">🌅 Commencer sa journée</div>
         </div>
         <div class="gallery-item">
